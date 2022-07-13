@@ -153,20 +153,6 @@ def main():
             print("saved net weight!")
             train_result.result_cae(train_loss, val_loss, log_path)
 
-                # val_loader_iter = iter(val_loader)
-                # image, _ = next(val_loader_iter)
-                # image = image.to(device)
-                # net.to(device)
-                # net.eval()
-                # with torch.no_grad():
-                #     output = net(image)
-                # output = output.cpu()
-                # print(output[0].size())
-                # pil_img = Image.fromarray(np.flip(output[0].numpy().reshape(
-                #     80, 80, 80).transpose(2, 0, 1)[50], 0) * 255)
-                # pil_img = pil_img.convert("L")
-                # pil_img.save(log_path+"img/cae_output_img.jpg")
-                #plt.imshow(np.flip(output[0].numpy().reshape(80, 80, 80).transpose(2,0,1)[50],0), cmap="gray")
 
         elif args.model == "VAE":
             train_loss, val_loss = trainer.train_vae(
@@ -175,19 +161,6 @@ def main():
             print("saved net weight!")
             train_result.result_cae(train_loss, val_loss, log_path)
 
-                # val_loader_iter = iter(val_loader)
-                # image, _ = next(val_loader_iter)
-                # image = image.to(device)
-                # net.to(device)
-                # net.eval()
-                # with torch.no_grad():
-                #     output, _, _ = net.forward(image)
-                # output = output.cpu()
-                # print(output[0].size())
-                # pil_img = Image.fromarray(np.flip(output[0].numpy().reshape(
-                #     80, 80, 80).transpose(1, 2, 0)[50], 0) * 255)
-                # pil_img = pil_img.convert("L")
-                # pil_img.save(log_path+"img/vae_output_img.jpg")
 
         elif args.model == "Caee":
             train_loss, val_loss = trainer.train_cae(net, train_loader, val_loader, args.epoch, args.lr, device, log_path)
