@@ -2,9 +2,7 @@ import argparse
 import os
 
 import numpy as np
-# from PIL import Image
 import torch
-# import os.path as osp
 import torchio as tio
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
 from torch.utils.data import DataLoader
@@ -19,12 +17,6 @@ import utils.my_trainer as trainer
 import utils.train_result as train_result
 from datasets.dataset import load_data
 from utils.data_class import BrainDataset
-
-# import csv
-# import random
-# import sys
-
-
 
 CLASS_MAP = {"CN": 0, "AD": 1}
 SEED_VALUE = 0
@@ -136,20 +128,10 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() and True else "cpu")
     print("device:", device)
 
-        # torch.nn.init.kaiming_normal_(net.encoder.conv1.weight)
-        # torch.nn.init.kaiming_normal_(net.encoder.conv2.weight)
-        # torch.nn.init.kaiming_normal_(net.encoder.conv3.weight)
-        # torch.nn.init.kaiming_normal_(net.encoder.conv4.weight)
-
-        # torch.nn.init.kaiming_normal_(net.decoder.deconv1.weight)
-        # torch.nn.init.kaiming_normal_(net.decoder.deconv2.weight)
-        # torch.nn.init.kaiming_normal_(net.decoder.deconv3.weight)
-        # torch.nn.init.kaiming_normal_(net.decoder.deconv4.weight)
-
     train_loader, val_loader = load_dataloader(args.n_train, args.batch_size)
     # loadnet or train
     if args.train_or_loadnet == "loadnet":
-        net.load_state_dict(torch.load(log_path+'weight.pth'))
+        net.load_state_dict(torch.load(log_path + 'weight.pth'))
         # とりあえずvalidationで確認 テストデータあとで作る
         confusion.make_confusion_matrix(
             net, val_loader, CLASS_MAP, device, log_path)
