@@ -27,7 +27,7 @@ def parser():
     # CNN or CAE or VAE
     parser.add_argument("--model", type=str, default="CNN")
     parser.add_argument("--batch_size", type=int, default=32)
-    parser.add_argument("--epoch", type=int, default=100)
+    parser.add_argument("--epoch", type=int, default=300)
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--log", type=str, default="output")
     parser.add_argument("--n_train", type=float, default=0.8)
@@ -61,7 +61,7 @@ class ImageTransformio():
 
 def load_dataloader(n_train_rate, batch_size):
     data = load_data(kinds=["ADNI2-2"], classes=["CN", "AD"], unique=False, blacklist=True)
-#   data = load_data(kinds=["ADNI2","ADNI2-2"], classes=["CN", "AD"], unique=True, blacklist=True)
+  # data = load_data(kinds=["ADNI2","ADNI2-2"], classes=["CN", "AD"], unique=True, blacklist=True)
     #data = dataset.load_data(kinds=kinds,classes=classes,unique=False)
     pids = []
     for i in range(len(data)):
@@ -124,7 +124,7 @@ def main():
 
 
 #   os.environ["CUDA_VISIBLE_DEVICES"]="6"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+    #os.environ["CUDA_VISIBLE_DEVICES"] = "4, 5, 6, 7"
     device = torch.device("cuda" if torch.cuda.is_available() and True else "cpu")
     print("device:", device)
 
@@ -153,14 +153,12 @@ def main():
             print("saved net weight!")
             train_result.result_cae(train_loss, val_loss, log_path)
 
-
         elif args.model == "VAE":
             train_loss, val_loss = trainer.train_vae(
                 net, train_loader, val_loader, args.epoch, args.lr, device, log_path)
             torch.save(net.state_dict(), log_path + "vae_weight.pth")
             print("saved net weight!")
             train_result.result_cae(train_loss, val_loss, log_path)
-
 
         elif args.model == "Caee":
             train_loss, val_loss = trainer.train_cae(net, train_loader, val_loader, args.epoch, args.lr, device, log_path)
