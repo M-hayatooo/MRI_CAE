@@ -1,21 +1,20 @@
 import argparse
 import os
 
+import models.models as models
 import numpy as np
 import torch
 import torchio as tio
+import utils.confusion as confusion
+import utils.my_trainer as trainer
+import utils.train_result as train_result
+from datasets.dataset import load_data
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
 from torch.utils.data import DataLoader
 from torchio.transforms.augmentation.intensity.random_bias_field import \
     RandomBiasField
 from torchio.transforms.augmentation.intensity.random_noise import RandomNoise
 from torchvision import transforms
-
-import models.models as models
-import utils.confusion as confusion
-import utils.my_trainer as trainer
-import utils.train_result as train_result
-from datasets.dataset import load_data
 from utils.data_class import BrainDataset
 
 CLASS_MAP = {"CN": 0, "AD": 1}
@@ -61,8 +60,8 @@ class ImageTransformio():
 
 def load_dataloader(n_train_rate, batch_size):
     data = load_data(kinds=["ADNI2-2"], classes=["CN", "AD"], unique=False, blacklist=True)
-  # data = load_data(kinds=["ADNI2","ADNI2-2"], classes=["CN", "AD"], unique=True, blacklist=True)
-    #data = dataset.load_data(kinds=kinds,classes=classes,unique=False)
+    # data = load_data(kinds=["ADNI2","ADNI2-2"], classes=["CN", "AD"], unique=True, blacklist=True)
+    # data = dataset.load_data(kinds=kinds,classes=classes,unique=False)
     pids = []
     for i in range(len(data)):
         pids.append(data[i]["pid"])
@@ -71,7 +70,7 @@ def load_dataloader(n_train_rate, batch_size):
     train_data = data[train_idx]
     val_data = data[val_idx]
 
-    #train_datadict, val_datadict = train_test_split(dataset, test_size=1-n_train_rate, shuffle=True, random_state=SEED_VALUE)
+    # train_datadict, val_datadict = train_test_split(dataset, test_size=1-n_train_rate, shuffle=True, random_state=SEED_VALUE)
     transform = ImageTransformio()
     # transform = None
     train_dataset = BrainDataset(data_dict=train_data, transform=transform, phase="train")
@@ -96,7 +95,7 @@ def main():
         print("net: CNN") # ------------------------------------- #
     elif args.model == "CAE":
         net = models.Cae()
-        #net = models.CAE3()
+        # net = models.CAE3()
         log_path = "./logs/" + args.log + "_cae/"
         print("net: CAE") # ------------------------------------- #
     elif args.model == "VAE":
@@ -124,7 +123,7 @@ def main():
 
 
 #   os.environ["CUDA_VISIBLE_DEVICES"]="6"
-    #os.environ["CUDA_VISIBLE_DEVICES"] = "4, 5, 6, 7"
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "4, 5, 6, 7"
     device = torch.device("cuda" if torch.cuda.is_available() and True else "cpu")
     print("device:", device)
 
